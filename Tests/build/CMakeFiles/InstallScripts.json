@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/gabealtenberger/Coding/Flowstate/Tests/build/cmake_install.cmake",
+		"/Users/gabealtenberger/Coding/Flowstate/Tests/build/JUCE/cmake_install.cmake",
+		"/Users/gabealtenberger/Coding/Flowstate/Tests/build/JUCE/modules/cmake_install.cmake",
+		"/Users/gabealtenberger/Coding/Flowstate/Tests/build/JUCE/extras/Build/cmake_install.cmake",
+		"/Users/gabealtenberger/Coding/Flowstate/Tests/build/JUCE/extras/Build/juceaide/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

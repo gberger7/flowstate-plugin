@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=900, height=500">
+    <title>Flowstate Audio Plugin</title>
+    <style>
+        /* Embedded fonts served via resource provider */
+        @font-face {
+            font-family: 'Rubik Glitch';
+            font-style: normal;
+            font-weight: 400;
+            src: url('fonts/RubikGlitch-Regular.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Rajdhani';
+            font-style: normal;
+            font-weight: 400;
+            src: url('fonts/Rajdhani-Regular.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Rajdhani';
+            font-style: normal;
+            font-weight: 500;
+            src: url('fonts/Rajdhani-Medium.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Rajdhani';
+            font-style: normal;
+            font-weight: 600;
+            src: url('fonts/Rajdhani-SemiBold.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'Rajdhani';
+            font-style: normal;
+            font-weight: 700;
+            src: url('fonts/Rajdhani-Bold.woff2') format('woff2');
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            width: 900px;
+            height: 620px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body {
+            width: 900px;
+            height: 620px;
+            background: #080b14;
+            font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #FFFFFF;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            position: relative;
+        }
+        
+        /* Particle Canvas */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 900px;
+            height: 620px;
+            z-index: 10;
+            pointer-events: none;
+            clip-path: inset(90px 0px 120px 0px);
+        }
+
+        /* Background photo layer */
+        #bg-photo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 900px;
+            height: 620px;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.18;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Main Layout */
+        #app {
+            width: 900px;
+            height: 620px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header Bar */
+        .header-bar {
+            height: 90px;
+            background: #0e1120;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            z-index: 3;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: #FFFFFF;
+            font-family: 'Rubik Glitch', sans-serif;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+        
+        /* Left Panel - Delay */
+        .panel-delay {
+            width: 280px;
+            background: transparent;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            justify-content: space-evenly;
+        }
+        
+        /* Center Panel - Blend */
+        .panel-blend {
+            flex: 1;
+            background: transparent;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+        
+        /* Right Panel - Reverb */
+        .panel-reverb {
+            width: 280px;
+            background: transparent;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 20px;
+            overflow: hidden;
+            justify-content: space-evenly;
+        }
+        
+        /* Main content radial glow background */
+        .main-content {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            position: relative;
+            z-index: 3;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse 45% 70% at 18% 35%, rgba(62, 207, 207, 0.55) 0%, transparent 60%),
+                radial-gradient(ellipse 35% 55% at 18% 35%, rgba(180, 240, 255, 0.3) 0%, transparent 40%),
+                radial-gradient(ellipse 50% 65% at 50% 40%, rgba(140, 80, 210, 0.45) 0%, transparent 60%),
+                radial-gradient(ellipse 45% 70% at 82% 35%, rgba(232, 140, 30, 0.6) 0%, transparent 60%),
+                radial-gradient(ellipse 30% 45% at 82% 35%, rgba(255, 200, 80, 0.3) 0%, transparent 35%),
+                radial-gradient(ellipse 80% 60% at 50% 50%, rgba(30, 20, 80, 0.5) 0%, transparent 80%),
+                #0a0d1a;
+        }
+        
+        /* Bottom Bar */
+        .bottom-bar {
+            height: 120px;
+            background: #0e1120;
+            display: flex;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            z-index: 3;
+        }
+        
+        /* Bottom Sections */
+        .bottom-section {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 12px 15px 10px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .bottom-section:last-child {
+            border-right: none;
+        }
+        
+        .section-modulation { background: transparent; }
+        .section-character  { background: transparent; }
+        .section-reverse    { background: transparent; }
+        .section-freeze     { background: transparent; }
+        .section-shimmer    { background: transparent; }
+        
+        /* Section Headers */
+        .section-header {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 1;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+        
+        .panel-delay .section-header { color: #3ECFCF; }
+        .panel-blend .section-header { color: #FFFFFF; }
+        .panel-reverb .section-header { color: #E8A838; }
+        
+        /* Knob Container */
+        .knob-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+            margin: 0;
+            z-index: 20;
+        }
+        
+        /* Knob SVG */
+        .knob {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            position: relative;
+            background: transparent;
+        }
+
+        .knob svg {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            overflow: visible;
+        }
+        
+        .knob:hover {
+            filter: brightness(1.2);
+        }
+        
+        /* Disable knob hover glow while any drag is in progress */
+        body.dragging-knob .knob:hover {
+            filter: none;
+        }
+        
+        /* Header Knobs - Smaller */
+        .knob-header {
+            width: 45px;
+            height: 45px;
+        }
+        
+        /* Large Knobs for Main Controls */
+        .knob-large {
+            width: 80px;
+            height: 80px;
+        }
+        
+        /* Extra Large Blend Knob */
+        .knob-blend {
+            width: 180px;
+            height: 180px;
+        }
+        
+        /* Bottom Bar Knobs - Smaller */
+        .knob-small {
+            width: 50px;
+            height: 50px;
+        }
+        
+        /* Knob Label */
+        .knob-label {
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.7;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Knob Value Display */
+        .knob-value {
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.9;
+            text-align: center;
+            min-height: 18px;
+        }
+        
+        /* Blend Value - Larger */
+        .blend-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-top: 6px;
+        }
+        
+        /* BPM Display Badge */
+        .bpm-badge {
+            position: absolute;
+            top: -5px;
+            right: -60px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            display: none;
+        }
+        
+        .bpm-badge.visible {
+            display: block;
+        }
+        
+        /* Button Styles */
+        .button {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            filter: brightness(1.2);
+        }
+        
+        /* Reverse Button Group */
+        .reverse-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .reverse-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        
+        .reverse-button {
+            padding: 8px 14px;
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: #FFFFFF;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        
+        .reverse-button:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .reverse-button.active-reverb {
+            background: rgba(232, 168, 56, 0.25);
+            border-color: #E8A838;
+            box-shadow: 0 0 10px rgba(232, 168, 56, 0.5);
+        }
+        
+        .reverse-button.active-delay {
+            background: rgba(62, 207, 207, 0.25);
+            border-color: #3ECFCF;
+            box-shadow: 0 0 10px rgba(62, 207, 207, 0.5);
+        }
+        
+        .reverse-button.active-both {
+            background: linear-gradient(135deg, rgba(62, 207, 207, 0.25), rgba(232, 168, 56, 0.25));
+            border-color: #C8B8FF;
+            box-shadow: 0 0 10px rgba(200, 184, 255, 0.5);
+        }
+        
+        .reverse-button.active-off {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+        }
+        
+        /* Freeze Button */
+        .button-freeze {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 700;
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button-freeze span {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .button-freeze:hover {
+            border-color: rgba(0, 229, 255, 0.4);
+            box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
+        }
+        
+        .button-freeze.active {
+            border-color: #00E5FF;
+            color: #0e1120;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.8), 0 0 40px rgba(0, 229, 255, 0.4);
+        }
+
+        /* Snowflake canvas sits behind the label */
+        .freeze-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            border-radius: 5px;
+        }
+
+        /* Sparkle canvas for shimmer button */
+        .shimmer-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+            border-radius: 5px;
+        }
+
+        .button-shimmer span {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.6); }
+            50%       { box-shadow: 0 0 30px rgba(0, 229, 255, 1.0); }
+        }
+        
+        /* Shimmer Toggle with Amber Glow */
+        .shimmer-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .button-shimmer {
+            padding: 8px 16px;
+            font-size: 11px;
+            background: rgba(232, 168, 56, 0.1);
+            border-color: rgba(232, 168, 56, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .button-shimmer.active {
+            background: rgba(232, 168, 56, 0.3);
+            border-color: #E8A838;
+            box-shadow: 0 0 15px rgba(232, 168, 56, 0.6), 0 0 30px rgba(232, 168, 56, 0.3);
+            color: #0e1120;
+        }
+
+        /* Suppress the inherited brightness filter when active — it interacts with
+           the large box-shadow to cause a paint-bounds recalculation on hover,
+           which jiggles the button and adjacent knob. Suppress on all states
+           since the transition itself also triggers the jiggle. */
+        .button-shimmer:hover,
+        .button-shimmer.active:hover {
+            filter: none;
+        }
+        
+        /* Controls Row */
+        .controls-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Bottom Section Label */
+        .bottom-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.5;
+            margin-bottom: 8px;
+            text-align: center;
+            width: 100%;
+        }
+        
+        /* Context Menu */
+        .context-menu {
+            position: fixed;
+            background: rgba(20, 20, 30, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 0;
+            min-width: 150px;
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .context-menu-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.15s ease;
+        }
+        
+        .context-menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Text Input for Value Entry */
+        .value-input {
+            position: absolute;
+            background: rgba(20, 20, 30, 0.95);
+            border: 1.5px solid #C8B8FF;
+            border-radius: 5px;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #FFFFFF;
+            text-align: center;
+            outline: none;
+            z-index: 1500;
+            display: none;
+            font-family: 'Rajdhani', sans-serif;
+            box-shadow: 0 0 8px rgba(200, 184, 255, 0.7), 0 0 16px rgba(200, 184, 255, 0.3);
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; overflow: hidden; position: relative;">
+    <!-- Background photo texture -->
+    <div id="bg-photo"></div>
+    <div id="app">
+        <!-- Particle canvas — inside app so it doesn't affect body flow -->
+        <canvas id="particle-canvas" width="900" height="620" style="position: absolute; top: 0; left: 0; width: 900px; height: 620px; z-index: 10; pointer-events: none;"></canvas>
+        <!-- Header Bar -->
+        <div class="header-bar">
+            <div class="logo">FLOWSTATE</div>
+            <div class="header-controls">
+                <div class="knob-container">
+                    <div class="knob knob-header" data-param="mix" data-min="0" data-max="100" data-default="0" data-unit="%"></div>
+                    <div class="knob-label">MIX</div>
+                </div>
+                <div class="knob-container">
+                    <div class="knob knob-header" data-param="stereoWidth" data-min="0" data-max="150" data-default="0" data-unit="%"></div>
+                    <div class="knob-label">WIDTH</div>
+                </div>
+                <div class="knob-container">
+                    <div class="knob knob-header" data-param="outputGain" data-min="-24" data-max="12" data-default="0" data-unit="dB"></div>
+                    <div class="knob-label">OUTPUT</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Left Panel - Delay -->
+            <div class="panel-delay">
+                <div class="section-header">DELAY</div>
+                
+                <div class="knob-container">
+                    <div class="knob knob-large" data-param="delayTime" data-min="1" data-max="2000" data-default="1" data-unit="ms"></div>
+                    <div class="knob-label">TIME</div>
+                    <div class="knob-value" data-param-value="delayTime">250ms</div>
+                    <div class="bpm-badge" data-bpm-display="delayTime">1/4</div>
+                </div>
+                
+                <div class="knob-container">
+                    <div class="knob knob-large" data-param="delayFeedback" data-min="0" data-max="100" data-default="0" data-unit="%"></div>
+                    <div class="knob-label">FEEDBACK</div>
+                    <div class="knob-value" data-param-value="delayFeedback">0%</div>
+                </div>
+                
+                <div class="knob-container">
+                    <div class="knob knob-large" data-param="delayDiffusion" data-min="0" data-max="100" data-default="0" data-unit="%"></div>
+                    <div class="knob-label">DIFFUSION</div>
+                    <div class="knob-value" data-param-value="delayDiffusion">0%</div>
+                </div>
+            </div>
+            
+            <!-- Center Panel - Blend -->
+            <div class="panel-blend">
+                <div class="section-header">BLEND</div>
+                
+                <div class="knob-container">
+                    <div class="knob knob-blend" data-param="blend" data-min="0" data-max="100" data-default="50" data-unit="%"></div>
+                    <div class="blend-value" data-param-value="blend" style="color:#FFFFFF;">BLEND</div>
+                </div>
+            </div>
+            
+            <!-- Right Panel - Reverb -->
+            <div class="panel-reverb">
+                <div class="section-header">REVERB</div>
+                
+                <div class="knob-container">
+                    <div class="knob knob-large" data-param="reverbSize" data-min="0" data-max="100" data-default="0" data-unit="%"></div>
+                    <div class="knob-label">SIZE</div>
+                    <div class="knob-value" data-param-value="reverbSize">20%</div>
+                </div>
+                
+                <div class="knob-container">
+                    <div class="knob knob-large" data-param="reverbDecay" data-min="0.1" data-max="20" data-default="0.1" data-unit="s"></div>
+                    <div class="knob-label">DECAY</div>
+                    <div class="knob-value" data-param-value="reverbDecay">1.0s</div>
+                </div>
+                
+                <div class="knob-container">
+                    <div class="knob knob-large" data-param="reverbDamping" data-min="0" data-max="100" data-default="0" data-unit="%"></div>
+                    <div class="knob-label">DAMPING</div>
+                    <div class="knob-value" data-param-value="reverbDamping">40%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <!-- Modulation Section -->
+            <div class="bottom-section section-modulation">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                    <div class="bottom-label">MODULATION</div>
+                    <div class="controls-row" style="margin-top: 4px;">
+                        <div class="knob-container" style="margin: 0;">
+                            <div class="knob knob-small" data-param="modRate" data-min="0" data-max="5" data-default="0" data-unit="Hz"></div>
+                            <div class="knob-label">RATE</div>
+                        </div>
+                        <div class="knob-container" style="margin: 0;">
+                            <div class="knob knob-small" data-param="modDepth" data-min="0" data-max="100" data-default="0" data-unit="%"></div>
+                            <div class="knob-label">DEPTH</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Character Section -->
+            <div class="bottom-section section-character">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                    <div class="bottom-label">CHARACTER</div>
+                    <div class="controls-row" style="margin-top: 4px;">
+                        <div class="knob-container" style="margin: 0;">
+                            <div class="knob knob-small" data-param="drive" data-min="0" data-max="100" data-default="0" data-unit="%"></div>
+                            <div class="knob-label">DRIVE</div>
+                        </div>
+                        <div class="knob-container" style="margin: 0;">
+                            <div class="knob knob-small" data-param="tone" data-min="0" data-max="100" data-default="0" data-unit="%"></div>
+                            <div class="knob-label">TONE</div>
+                        </div>
+                        <div class="knob-container" style="margin: 0;">
+                            <div class="knob knob-small" data-param="duckSensitivity" data-min="0" data-max="100" data-default="0" data-unit="%"></div>
+                            <div class="knob-label">DUCK</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reverse Section -->
+            <div class="bottom-section section-reverse">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                    <div class="bottom-label">REVERSE</div>
+                    <div class="reverse-buttons" style="margin-top: 4px;">
+                        <div class="reverse-button" data-reverse-mode="1">REVERB</div>
+                        <div class="reverse-button" data-reverse-mode="2">DELAY</div>
+                        <div class="reverse-button" data-reverse-mode="3">BOTH</div>
+                        <div class="reverse-button active-off" data-reverse-mode="0">OFF</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Freeze Section -->
+            <div class="bottom-section section-freeze">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                    <div class="bottom-label">FREEZE</div>
+                    <button class="button button-freeze" data-param="freezeEnabled" style="margin-top: 4px;"><span>FREEZE</span></button>
+                </div>
+            </div>
+            
+            <!-- Shimmer Section -->
+            <div class="bottom-section section-shimmer">
+                <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                    <div class="bottom-label">SHIMMER</div>
+                    <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 12px; margin-top: 4px;">
+                        <button class="button button-shimmer" data-param="shimmerEnabled" style="margin-bottom: 26px;"><span>ON</span></button>
+                        <div class="knob-container" style="margin: 0;">
+                            <div class="knob knob-small" data-param="shimmerPitch" data-min="-24" data-max="24" data-default="0" data-unit="st"></div>
+                            <div class="knob-value" data-param-value="shimmerPitch">+12st</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Context Menu -->
+    <div class="context-menu" id="contextMenu">
+        <div class="context-menu-item" id="resetToDefault">Reset to Default</div>
+    </div>
+
+    <!-- Debug Overlay -->
+    <div id="debug-toggle" style="
+        position: fixed; bottom: 8px; left: 8px; z-index: 9999;
+        width: 18px; height: 18px; background: rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.3); border-radius: 3px;
+        color: #fff; font-size: 10px; font-family: monospace;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; user-select: none;">D</div>
+    <div id="debug-overlay" style="
+        display: none; position: fixed; bottom: 30px; left: 8px; z-index: 9998;
+        width: 340px; background: rgba(0,0,0,0.82);
+        border: 1px solid rgba(255,255,255,0.2); border-radius: 5px;
+        padding: 8px; font-family: monospace; font-size: 10px;
+        color: #cfc; line-height: 1.5; pointer-events: none;">
+        <div id="debug-lines">waiting for events…</div>
+    </div>
+    
+    <!-- Value Input -->
+    <input type="text" class="value-input" id="valueInput" />
+    
+    <!-- SVG Definitions -->
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <!-- Legacy gradient kept for compatibility -->
+            <linearGradient id="blend-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#3ECFCF;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#C8B8FF;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#E8A838;stop-opacity:1" />
+            </linearGradient>
+            <!-- Blend arc gradient: teal left → lavender top → amber right -->
+            <linearGradient id="blend-arc-gradient" x1="0%" y1="100%" x2="100%" y2="100%">
+                <stop offset="0%"   stop-color="#3ECFCF" />
+                <stop offset="50%"  stop-color="#C8B8FF" />
+                <stop offset="100%" stop-color="#E8A838" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <script>
+        // ── Debug overlay ────────────────────────────────────────────────────
+        const _dbgLines = [];
+        function dbgLog(msg) {
+            console.log(msg);
+            _dbgLines.push(msg);
+            if (_dbgLines.length > 6) _dbgLines.shift();
+            const el = document.getElementById('debug-lines');
+            if (el) el.innerHTML = _dbgLines.map(l =>
+                `<div style="border-bottom:1px solid rgba(255,255,255,0.08);padding:1px 0">${l}</div>`
+            ).join('');
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('debug-toggle');
+            const box = document.getElementById('debug-overlay');
+            if (btn && box) btn.addEventListener('click', () => {
+                box.style.display = box.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+        // ─────────────────────────────────────────────────────────────────────
+
+        // Flowstate Plugin UI Controller
+        window.flowstate = {
+            params: {},
+            defaults: {},
+            pendingParams: {},   // paramId → normalized value awaiting C++ echo
+            dragging: null,
+            isDragging: false,
+            currentBPM: 120,
+            
+            // Initialize the UI
+            init() {
+                this.initKnobs();
+                this.initButtons();
+                this.initReverseSelector();
+                this.initContextMenu();
+                this.loadDefaults();
+                console.log('Flowstate UI initialized');
+            },
+            
+            // Load default values from data attributes
+            loadDefaults() {
+                document.querySelectorAll('[data-param]').forEach(element => {
+                    const paramId = element.dataset.param;
+                    const defaultValue = parseFloat(element.dataset.default);
+                    if (!isNaN(defaultValue)) {
+                        this.defaults[paramId] = defaultValue;
+                        const normalized = this.valueToNormalized(paramId, defaultValue);
+                        this.updateParam(paramId, normalized, false);
+                    }
+                });
+            },
+            
+            // Initialize all knob controls
+            initKnobs() {
+                document.querySelectorAll('.knob').forEach(knob => {
+                    const paramId = knob.dataset.param;
+                    if (!paramId) return;
+                    
+                    this.createKnobSVG(knob);
+                    
+                    knob.addEventListener('mousedown', (e) => this.startDrag(e, paramId, knob));
+                    knob.addEventListener('dblclick', (e) => this.showValueInput(e, paramId, knob));
+                    knob.addEventListener('contextmenu', (e) => this.showContextMenu(e, paramId));
+                });
+            },
+            
+            // Create SVG knob visual
+            createKnobSVG(knobElement) {
+                const isBlend = knobElement.classList.contains('knob-blend');
+
+                if (isBlend) {
+                    this.createBlendKnobSVG(knobElement);
+                    return;
+                }
+
+                const isLarge = knobElement.classList.contains('knob-large');
+                const isSmall = knobElement.classList.contains('knob-small');
+                const isHeader = knobElement.classList.contains('knob-header');
+                const isOutput = knobElement.dataset.param === 'outputGain';
+                const isGlow   = knobElement.dataset.param === 'mix' || knobElement.dataset.param === 'stereoWidth';
+                
+                let size = 60;
+                if (isLarge) size = 80;
+                else if (isSmall) size = 50;
+                else if (isHeader) size = 45;
+                
+                const strokeWidth = isLarge ? 6 : (isHeader ? 3 : 5);
+                const radius = (size / 2) - (strokeWidth / 2) - 2;
+                const circumference = 2 * Math.PI * radius;
+                const arcLength = circumference * 0.75; // 270° sweep (8 o'clock → 4 o'clock)
+                const center = size / 2;
+                const bodyR = radius - strokeWidth / 2 - 2;
+                
+                let trackStroke;
+                if (isHeader) {
+                    trackStroke = '#4a5568';
+                } else {
+                    const inReverb = knobElement.closest('.panel-reverb');
+                    trackStroke = inReverb ? '#E8A838' : '#3ECFCF';
+                }
+                
+                const svg = `
+                    <svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="knob-body-${size}" cx="45%" cy="35%" r="60%">
+                                <stop offset="0%" stop-color="#2a2a3e"/>
+                                <stop offset="100%" stop-color="#1a1a28"/>
+                            </radialGradient>
+                        </defs>
+                        <circle cx="${center}" cy="${center}" r="${bodyR}" fill="url(#knob-body-${size})" />
+                        <ellipse cx="${center}" cy="${center * 0.6}" rx="${bodyR * 0.5}" ry="${bodyR * 0.2}"
+                                 fill="rgba(255,255,255,0.07)" />
+                        <circle class="knob-track-bg" 
+                                cx="${center}" cy="${center}" r="${radius}"
+                                fill="none" 
+                                stroke="rgba(255, 255, 255, 0.06)" 
+                                stroke-width="${strokeWidth}"
+                                stroke-linecap="round" />
+                        <circle class="knob-track" 
+                                cx="${center}" cy="${center}" r="${radius}"
+                                fill="none" 
+                                stroke="${trackStroke}" 
+                                stroke-width="${strokeWidth}"
+                                stroke-linecap="round"
+                                stroke-dasharray="${2 * Math.PI * radius}"
+                                stroke-dashoffset="${2 * Math.PI * radius}"
+                                transform="rotate(-150 ${center} ${center})" />
+                        ${isOutput ? `<circle class="knob-boost-track"
+                                cx="${center}" cy="${center}" r="${radius}"
+                                fill="none"
+                                stroke="rgba(255,255,255,0.95)"
+                                stroke-width="${strokeWidth}"
+                                stroke-linecap="round"
+                                stroke-dasharray="${2 * Math.PI * radius}"
+                                stroke-dashoffset="${2 * Math.PI * radius}"
+                                transform="rotate(-90 ${center} ${center})" />
+                               <g transform="scale(-1,1) translate(-${size},0)">
+                                 <circle class="knob-cut-track"
+                                   cx="${center}" cy="${center}" r="${radius}"
+                                   fill="none"
+                                   stroke="rgba(255,255,255,0.25)"
+                                   stroke-width="${strokeWidth}"
+                                   stroke-linecap="round"
+                                   stroke-dasharray="${2 * Math.PI * radius}"
+                                   stroke-dashoffset="${2 * Math.PI * radius}"
+                                   transform="rotate(-90 ${center} ${center})" />
+                               </g>` : ''}
+                        ${isGlow ? `<circle class="knob-glow-track"
+                                cx="${center}" cy="${center}" r="${radius}"
+                                fill="none"
+                                stroke="rgba(255,255,255,0.95)"
+                                stroke-width="${strokeWidth}"
+                                stroke-linecap="round"
+                                stroke-dasharray="${arcLength} ${circumference}"
+                                stroke-dashoffset="${arcLength}"
+                                transform="rotate(-150 ${center} ${center})" />` : ''}
+                        <line class="knob-pointer"
+                              x1="${center}" y1="${center * 0.35}"
+                              x2="${center}" y2="${center * 0.65}"
+                              stroke="rgba(255, 255, 255, 0.9)"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              transform="rotate(-150 ${center} ${center})" />
+                        ${isOutput ? `<text class="output-db-label"
+                              x="${center}" y="${center + 4}"
+                              text-anchor="middle"
+                              font-size="9"
+                              font-weight="700"
+                              font-family="Rajdhani, sans-serif"
+                              fill="white"
+                              opacity="0"
+                              pointer-events="none"
+                              style="transition: opacity 0.15s ease;"></text>` : ''}
+                    </svg>
+                `;
+                
+                knobElement.innerHTML = svg;
+            },
+
+            // ── Blend knob: custom SVG with gradient arc, endpoint dots, center triangle ──
+            createBlendKnobSVG(knobElement) {
+                const S = 180, C = 90, R = 74, SW = 8, bodyR = 62;
+                const toRad = d => d * Math.PI / 180;
+                const dotR = 4;
+                const dotOffset = R + SW / 2 + 3;
+                const startDotX = C + dotOffset * Math.cos(toRad(135));
+                const startDotY = C + dotOffset * Math.sin(toRad(135));
+                const endDotX   = C + dotOffset * Math.cos(toRad(45));
+                const endDotY   = C + dotOffset * Math.sin(toRad(45));
+                const triDist = R + SW / 2 + 6;
+                const triX = C;
+                const triY = C - triDist;
+                const triSize = 5;
+
+                // Single full arc path 135°→405° (7 o'clock → 5 o'clock) with small extension for rounded caps
+                const ax1 = (C + R * Math.cos(toRad(135))).toFixed(3);
+                const ay1 = (C + R * Math.sin(toRad(135))).toFixed(3);
+                const ax2 = (C + R * Math.cos(toRad(405))).toFixed(3);
+                const ay2 = (C + R * Math.sin(toRad(405))).toFixed(3);
+                const fullArcD = `M ${ax1} ${ay1} A ${R} ${R} 0 1 1 ${ax2} ${ay2}`;
+
+                knobElement.innerHTML = `
+                    <svg viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg" style="overflow:visible">
+                        <defs>
+                            <radialGradient id="knob-body-blend" cx="45%" cy="35%" r="60%">
+                                <stop offset="0%" stop-color="#2a2a3e"/>
+                                <stop offset="100%" stop-color="#1a1a28"/>
+                            </radialGradient>
+                            <!-- Single gradient: teal left → lavender center → amber right, userSpaceOnUse -->
+                            <linearGradient id="blend-arc-grad" gradientUnits="userSpaceOnUse"
+                                            x1="${C - R - SW}" y1="${C}" x2="${C + R + SW}" y2="${C}">
+                                <stop offset="0%"   stop-color="#3ECFCF"/>
+                                <stop offset="30%"  stop-color="#3ECFCF"/>
+                                <stop offset="43%"  stop-color="#5DDADA"/>
+                                <stop offset="50%"  stop-color="#C8B8FF"/>
+                                <stop offset="57%"  stop-color="#E8B870"/>
+                                <stop offset="70%"  stop-color="#E8A838"/>
+                                <stop offset="100%" stop-color="#E8A838"/>
+                            </linearGradient>
+                            <!-- Clip: union of teal wedge + amber wedge, updated dynamically -->
+                            <clipPath id="blend-reveal-clip">
+                                <path class="blend-clip-teal-wedge"  d=""/>
+                                <path class="blend-clip-amber-wedge" d=""/>
+                            </clipPath>
+                        </defs>
+
+                        <circle cx="${C}" cy="${C}" r="${bodyR}" fill="url(#knob-body-blend)"/>
+                        <ellipse cx="${C}" cy="${C * 0.6}" rx="${bodyR * 0.5}" ry="${bodyR * 0.2}"
+                                 fill="rgba(255,255,255,0.07)"/>
+
+                        <!-- Background track -->
+                        <path d="${fullArcD}" fill="none"
+                              stroke="rgba(255,255,255,0.08)" stroke-width="${SW}" stroke-linecap="round"/>
+
+                        <!-- Single gradient arc, revealed by clip -->
+                        <path d="${fullArcD}" fill="none"
+                              stroke="url(#blend-arc-grad)" stroke-width="${SW}" stroke-linecap="round"
+                              clip-path="url(#blend-reveal-clip)"/>
+
+                        <polygon class="blend-center-tri"
+                                 points="${triX},${triY + triSize} ${triX - triSize},${triY - triSize * 0.6} ${triX + triSize},${triY - triSize * 0.6}"
+                                 fill="white" opacity="0.2"/>
+
+                        <line class="knob-pointer"
+                              x1="${C + bodyR * 0.1}" y1="${C}"
+                              x2="${C + bodyR * 0.55}" y2="${C}"
+                              stroke="rgba(255,255,255,0.95)" stroke-width="3" stroke-linecap="round"
+                              transform="rotate(135 ${C} ${C})"/>
+                    </svg>`;
+
+                this.updateBlendKnob(knobElement, 0.5);
+            },
+
+            _blendArcPath() {}, // no longer used
+
+            updateBlendKnob(knobElement, v) {
+                const C = 90, R = 74, SW = 8;
+                const toRad = d => d * Math.PI / 180;
+                const outerR = R + SW + 4;
+
+                const needleDeg = 135 + v * 270;
+                const needle = knobElement.querySelector('.knob-pointer');
+                if (needle) needle.setAttribute('transform', `rotate(${needleDeg.toFixed(2)} ${C} ${C})`);
+
+                // Per spec: teal stays full when turning left (v<0.5), shrinks when turning right (v>0.5)
+                // Amber stays full when turning right (v>0.5), shrinks when turning left (v<0.5)
+                const tealProp  = v < 0.5 ? 1.0 : 1 - (v - 0.5) * 2;
+                const amberProp = v > 0.5 ? 1.0 : v * 2;
+
+                // Teal wedge: anchored at 270° (12 o'clock), extends counter-clockwise to tealStart
+                const tealStart = 270 - tealProp * 142;  // 128° at prop=1, 270° at prop=0
+                const amberEnd  = 270 + amberProp * 142; // 412° at prop=1, 270° at prop=0
+
+                function wedge(startDeg, endDeg) {
+                    if (endDeg <= startDeg + 0.1) return '';
+                    const sweep = endDeg - startDeg;
+                    const la = sweep > 180 ? 1 : 0;
+                    const x1 = C + outerR * Math.cos(toRad(startDeg));
+                    const y1 = C + outerR * Math.sin(toRad(startDeg));
+                    const x2 = C + outerR * Math.cos(toRad(endDeg));
+                    const y2 = C + outerR * Math.sin(toRad(endDeg));
+                    return `M ${C} ${C} L ${x1.toFixed(3)} ${y1.toFixed(3)} A ${outerR} ${outerR} 0 ${la} 1 ${x2.toFixed(3)} ${y2.toFixed(3)} Z`;
+                }
+
+                const tw = knobElement.querySelector('.blend-clip-teal-wedge');
+                const aw = knobElement.querySelector('.blend-clip-amber-wedge');
+                if (tw) tw.setAttribute('d', wedge(tealStart, 270));
+                if (aw) aw.setAttribute('d', wedge(270, amberEnd));
+
+                const tri = knobElement.querySelector('.blend-center-tri');
+                if (tri) {
+                    const dist = Math.abs(v - 0.5);
+                    let opacity, filter;
+                    if (dist <= 0.05) {
+                        const t = 1 - (dist / 0.05);
+                        opacity = 0.2 + 0.8 * t;
+                        filter = `drop-shadow(0 0 ${(4 * t).toFixed(1)}px white)`;
+                    } else if (dist <= 0.20) {
+                        const t = 1 - ((dist - 0.05) / 0.15);
+                        opacity = 0.2 + 0.4 * t;
+                        filter = 'none';
+                    } else {
+                        opacity = 0.2;
+                        filter = 'none';
+                    }
+                    tri.setAttribute('opacity', opacity.toFixed(3));
+                    tri.style.filter = filter;
+                }
+            },
+            
+            // Start drag interaction.
+            // mousemove: update local visual only. No C++ calls.
+            // mouseup: send final value to C++ exactly once.
+            startDrag(e, paramId, knobElement) {
+                e.preventDefault();
+
+                const startY     = e.clientY;
+                const startValue = this.params[paramId] ?? 0.5;
+                const isBlend    = paramId === 'blend';
+                const isOutput   = paramId === 'outputGain';
+                const outputZero = 24 / 36; // normalized 0dB for -24 to +12 range
+
+                let currentValue = startValue;
+                // Blend detent state: tracks whether we're currently snapped to center
+                let snapEngaged  = false;
+
+                this.dragging   = { paramId, startY, startValue, knobElement };
+                this.isDragging = true;
+                document.body.classList.add('dragging-knob');
+
+                // Show output dB label on drag start
+                if (isOutput) {
+                    const dbLabel = knobElement.querySelector('.output-db-label');
+                    const needle  = knobElement.querySelector('.knob-pointer');
+                    if (dbLabel) {
+                        const dbVal = startValue * 36 - 24;
+                        const sign = dbVal > 0.05 ? '+' : '';
+                        dbLabel.textContent = `${sign}${dbVal.toFixed(1)}`;
+                        dbLabel.style.transition = 'opacity 0.15s ease';
+                        dbLabel.setAttribute('opacity', '1');
+                    }
+                    if (needle) {
+                        needle.style.transition = 'opacity 0.15s ease';
+                        needle.style.opacity = '0.15';
+                    }
+                }
+
+                const onMove = (moveEvent) => {
+                    if (!this.dragging) return;
+                    const deltaY = this.dragging.startY - moveEvent.clientY;
+                    let rawValue = Math.max(0, Math.min(1, this.dragging.startValue + deltaY / 200));
+
+                    // Blend knob center detent: snap to 0.5 within ±5%
+                    if (isBlend) {
+                        const distFromCenter = Math.abs(rawValue - 0.5);
+                        if (distFromCenter <= 0.05) {
+                            rawValue = 0.5;
+                            if (!snapEngaged) {
+                                snapEngaged = true;
+                                this._pulseBlendTriangle(knobElement);
+                            }
+                        } else {
+                            snapEngaged = false;
+                        }
+                    }
+
+                    // Output knob 0dB detent: snap to outputZero within ±5%
+                    if (isOutput) {
+                        const distFromZero = Math.abs(rawValue - outputZero);
+                        if (distFromZero <= 0.05) {
+                            rawValue = outputZero;
+                            snapEngaged = true;
+                        } else {
+                            snapEngaged = false;
+                        }
+                        // Update transient dB label
+                        const dbLabel = knobElement.querySelector('.output-db-label');
+                        if (dbLabel) {
+                            const dbVal = rawValue * 36 - 24; // denormalize: -24 to +12
+                            const sign = dbVal > 0.05 ? '+' : '';
+                            dbLabel.textContent = `${sign}${dbVal.toFixed(1)}`;
+                        }
+                    }
+
+                    currentValue = rawValue;
+                    this.params[paramId] = currentValue;
+                    this.updateKnobVisual(knobElement, currentValue);
+                    this.updateValueDisplay(paramId, currentValue);
+                };
+
+                const onUp = () => {
+                    document.removeEventListener('mousemove', onMove);
+                    document.removeEventListener('mouseup', onUp);
+                    document.body.classList.remove('dragging-knob');
+                    this.pendingParams[paramId] = currentValue;
+                    this.sendToPlugin(paramId, currentValue);
+                    this.isDragging = false;
+                    this.dragging   = null;
+                    setTimeout(() => { this.isDragging = false; }, 150);
+
+                    // Fade out output dB label after 1 second, restore needle
+                    if (isOutput) {
+                        const dbLabel = knobElement.querySelector('.output-db-label');
+                        const needle  = knobElement.querySelector('.knob-pointer');
+                        if (dbLabel) {
+                            setTimeout(() => {
+                                dbLabel.style.transition = 'opacity 0.4s ease';
+                                dbLabel.setAttribute('opacity', '0');
+                                if (needle) {
+                                    needle.style.transition = 'opacity 0.4s ease';
+                                    needle.style.opacity = '1';
+                                }
+                            }, 200);
+                        }
+                    }
+                };
+
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onUp);
+            },
+
+            // Brief triangle glow pulse when blend snaps to center
+            _pulseBlendTriangle(knobElement) {
+                const tri = knobElement.querySelector('.blend-center-tri');
+                if (!tri) return;
+                // Flash to full bright with bloom for 200ms then return to normal
+                tri.setAttribute('opacity', '1.0');
+                tri.style.filter = 'drop-shadow(0 0 6px white)';
+                setTimeout(() => {
+                    // Let updateBlendKnob restore the correct opacity on next frame
+                    tri.setAttribute('opacity', '0.2');
+                    tri.style.filter = 'none';
+                }, 200);
+            },
+            
+            // syncParams — called by C++ timer at 20Hz with full parameter snapshot.
+            // Updates all knob visuals. Never calls sendToPlugin.
+            // For any param in pendingParams: if C++ echoes back a value within
+            // epsilon of what we sent, the confirmation is received and the lock
+            // is released. Until then, skip the visual update for that param.
+            syncParams(p) {
+                const activeDragParam = this.isDragging && this.dragging ? this.dragging.paramId : null;
+                for (const [id, normalized] of Object.entries(p)) {
+                    this.params[id] = normalized;
+
+                    // If this param has a pending value, check for C++ confirmation.
+                    if (id in this.pendingParams) {
+                        const pending = this.pendingParams[id];
+                        const diff = Math.abs(normalized - pending);
+                        dbgLog(`[SYNC] t=${performance.now().toFixed(1)}ms  ${id} = ${normalized.toFixed(4)}  pending = ${pending.toFixed(4)}  diff = ${diff.toFixed(4)}  confirmed = ${diff <= 0.01}`);
+                        if (diff <= 0.01) {
+                            delete this.pendingParams[id]; // confirmed — release lock
+                        } else {
+                            continue; // not confirmed yet — skip visual update
+                        }
+                    }
+
+                    // Also skip the knob currently being dragged.
+                    if (id === activeDragParam) continue;
+
+                    const knob = document.querySelector(`[data-param="${id}"].knob`);
+                    if (knob) this.updateKnobVisual(knob, normalized);
+                    this.updateValueDisplay(id, normalized);
+                }
+            },
+
+            // updateParam — used by loadDefaults() and context-menu reset only.
+            updateParam(paramId, normalizedValue, sendToPluginFlag = false) {
+                this.params[paramId] = normalizedValue;
+                const knob = document.querySelector(`[data-param="${paramId}"].knob`);
+                if (knob) this.updateKnobVisual(knob, normalizedValue);
+                this.updateValueDisplay(paramId, normalizedValue);
+                if (sendToPluginFlag) this.sendToPlugin(paramId, normalizedValue);
+            },
+            
+            // Update knob visual rotation and arc
+            updateKnobVisual(knobElement, normalizedValue) {
+                // Blend knob has its own renderer
+                if (knobElement.classList.contains('knob-blend')) {
+                    this.updateBlendKnob(knobElement, normalizedValue);
+                    return;
+                }
+
+                const svg = knobElement.querySelector('svg');
+                if (!svg) return;
+                
+                const track = svg.querySelector('.knob-track');
+                const pointer = svg.querySelector('.knob-pointer');
+                const center = parseFloat(svg.getAttribute('viewBox').split(' ')[2]) / 2;
+                
+                const rotation = -150 + (normalizedValue * 270);
+                
+                if (pointer) {
+                    pointer.setAttribute('transform', `rotate(${rotation} ${center} ${center})`);
+                }
+
+                // Pre-compute arc metrics used by multiple branches
+                const _radius = track ? parseFloat(track.getAttribute('r')) : 0;
+                const circumference = 2 * Math.PI * _radius;
+                const arcLength = circumference * 0.75;
+
+                // Output knob: bidirectional arc from 12 o'clock
+                if (knobElement.dataset.param === 'outputGain') {
+                    // Range: -24dB to +12dB, span=36. 0dB normalized = 24/36 = 0.6667
+                    // Needle: remap so 0dB = 12 o'clock (rotation 0°)
+                    const zeroDb = 24 / 36;
+                    let needleRot;
+                    if (normalizedValue <= zeroDb) {
+                        needleRot = ((normalizedValue - zeroDb) / zeroDb) * 135;
+                    } else {
+                        needleRot = ((normalizedValue - zeroDb) / (1 - zeroDb)) * 135;
+                    }
+                    if (pointer) pointer.setAttribute('transform', `rotate(${needleRot.toFixed(2)} ${center} ${center})`);
+
+                    const radius = track ? parseFloat(track.getAttribute('r')) : 0;
+                    const circumference = 2 * Math.PI * radius;
+                    const cutTrack = svg.querySelector('.knob-cut-track');
+                    if (cutTrack) {
+                        if (normalizedValue < zeroDb - 0.001) {
+                            const cutProp = (zeroDb - normalizedValue) / zeroDb;
+                            const arcLen = cutProp * circumference * 0.375;
+                            cutTrack.style.strokeDashoffset = circumference - arcLen;
+                        } else {
+                            cutTrack.style.strokeDashoffset = circumference;
+                        }
+                    }
+                    // Hide the standard track for output knob
+                    if (track) track.style.strokeDashoffset = circumference;
+
+                    const boostTrack = svg.querySelector('.knob-boost-track');
+                    if (boostTrack) {
+                        if (normalizedValue > zeroDb + 0.001) {
+                            const boostProp = (normalizedValue - zeroDb) / (1 - zeroDb);
+                            const arcLen = boostProp * circumference * 0.375; // 135° max boost
+                            boostTrack.style.strokeDashoffset = circumference - arcLen;
+                            boostTrack.style.filter = 'drop-shadow(0 0 4px white)';
+                        } else {
+                            boostTrack.style.strokeDashoffset = circumference;
+                            boostTrack.style.filter = 'none';
+                        }
+                    }
+                    return;
+                }
+                
+                   // Glow knobs (mix, stereoWidth): white glowing arc from 8 o'clock, tracks needle
+                if (knobElement.dataset.param === 'mix' || knobElement.dataset.param === 'stereoWidth') {
+                    if (track) track.style.strokeDashoffset = circumference;
+
+                    const glowTrack = svg.querySelector('.knob-glow-track');
+                    if (glowTrack) {
+                        const r = parseFloat(glowTrack.getAttribute('r'));
+                        const glowCirc = 2 * Math.PI * r;
+                        const glowArc = glowCirc * 0.75;
+                        // Dash = 270° segment only; gap = full circumference so the pattern does not repeat on the circle
+                        glowTrack.setAttribute('stroke-dasharray', `${glowArc} ${glowCirc}`);
+                        glowTrack.style.strokeDashoffset = String(glowArc * (1 - normalizedValue));
+                        glowTrack.style.filter = normalizedValue > 0 ? 'drop-shadow(0 0 5px white)' : 'none';
+                    }
+                    return;
+                }
+
+                if (track) {
+                    track.style.strokeDashoffset = arcLength - (normalizedValue * arcLength);
+                }
+            },
+            
+                        // Update value display text
+            updateValueDisplay(paramId, normalizedValue) {
+                const valueElement = document.querySelector(`[data-param-value="${paramId}"]`);
+                if (!valueElement) return;
+                
+                // Blend knob: show DELAY / BLEND / REVERB label with color
+                if (paramId === 'blend') {
+                    let text, color;
+                    if (normalizedValue < 0.20) {
+                        text = 'DELAY'; color = '#3ECFCF';
+                    } else if (normalizedValue > 0.80) {
+                        text = 'REVERB'; color = '#E8A838';
+                    } else {
+                        text = 'BLEND'; color = '#FFFFFF';
+                    }
+                    valueElement.textContent = text;
+                    valueElement.style.color = color;
+                    return;
+                }
+
+                const actualValue = this.normalizedToValue(paramId, normalizedValue);
+                const unit = this.getParamUnit(paramId);
+                
+                let displayText = '';
+                
+                if (paramId === 'delayTime') {
+                    displayText = `${Math.round(actualValue)}${unit}`;
+                } else if (paramId === 'reverbDecay') {
+                    displayText = `${actualValue.toFixed(1)}${unit}`;
+                } else if (paramId === 'modRate') {
+                    displayText = `${actualValue.toFixed(2)}${unit}`;
+                } else if (paramId === 'shimmerPitch') {
+                    const sign = actualValue >= 0 ? '+' : '';
+                    displayText = `${sign}${Math.round(actualValue)}${unit}`;
+                } else if (paramId === 'outputGain') {
+                    const sign = actualValue > 0 ? '+' : '';
+                    displayText = `${sign}${actualValue.toFixed(1)}${unit}`;
+                } else {
+                    displayText = `${Math.round(actualValue)}${unit}`;
+                }
+                
+                valueElement.textContent = displayText;
+            },
+            
+            // Convert normalized (0-1) to actual parameter value
+            normalizedToValue(paramId, normalized) {
+                const element = document.querySelector(`[data-param="${paramId}"]`);
+                if (!element) return normalized;
+                
+                const min = parseFloat(element.dataset.min) || 0;
+                const max = parseFloat(element.dataset.max) || 1;
+                
+                return min + (normalized * (max - min));
+            },
+            
+            // Convert actual value to normalized (0-1)
+            valueToNormalized(paramId, value) {
+                const element = document.querySelector(`[data-param="${paramId}"]`);
+                if (!element) return value;
+                
+                const min = parseFloat(element.dataset.min) || 0;
+                const max = parseFloat(element.dataset.max) || 1;
+                
+                return (value - min) / (max - min);
+            },
+            
+            // Get parameter unit
+            getParamUnit(paramId) {
+                const element = document.querySelector(`[data-param="${paramId}"]`);
+                return element ? (element.dataset.unit || '') : '';
+            },
+            
+            // sendToPlugin — fires "paramChange" event to C++ exactly once per call.
+            // C++ calls setValueNotifyingHost() and stops. Nothing else.
+            sendToPlugin(paramId, normalizedValue) {
+                dbgLog(`[SEND] t=${performance.now().toFixed(1)}ms  ${paramId} = ${normalizedValue.toFixed(4)}`);
+                if (window.__JUCE__ && window.__JUCE__.backend) {
+                    window.__JUCE__.backend.emitEvent('paramChange', {
+                        id:    paramId,
+                        value: normalizedValue
+                    });
+                }
+            },
+            
+            // Initialize button controls
+            initButtons() {
+                const shimmerBtn = document.querySelector('[data-param="shimmerEnabled"]');
+                if (shimmerBtn) {
+                    let shimmerRAF = null;
+                    let shimmerCanvas = null;
+
+                    const startSparkles = () => {
+                        shimmerCanvas = document.createElement('canvas');
+                        shimmerCanvas.className = 'shimmer-canvas';
+                        // Measure BEFORE inserting to get the button's natural size
+                        const W = shimmerBtn.offsetWidth;
+                        const H = shimmerBtn.offsetHeight;
+                        // Set both the pixel buffer AND the CSS size explicitly
+                        shimmerCanvas.width  = W;
+                        shimmerCanvas.height = H;
+                        shimmerCanvas.style.width  = W + 'px';
+                        shimmerCanvas.style.height = H + 'px';
+                        shimmerBtn.insertBefore(shimmerCanvas, shimmerBtn.firstChild);
+
+                        const ctx = shimmerCanvas.getContext('2d');
+
+                        // Twinkling stars — fixed positions, pulsing alpha
+                        const stars = Array.from({ length: 18 }, () => ({
+                            x: 3 + Math.random() * (W - 6),
+                            y: 3 + Math.random() * (H - 6),
+                            r: 0.8 + Math.random() * 2.2,
+                            phase: Math.random() * Math.PI * 2,   // offset so they don't all pulse together
+                            speed: 0.04 + Math.random() * 0.06,   // twinkle speed
+                            // 4-pointed cross arms length multiplier
+                            arms: 1.5 + Math.random() * 2.5,
+                            // amber / gold / white
+                            hue: [42, 50, 0][Math.floor(Math.random() * 3)],
+                            sat: Math.random() < 0.25 ? 0 : 100,
+                        }));
+
+                        // Draw a 4-pointed star (cross + diagonals)
+                        function drawStar(ctx, x, y, r, arms, alpha, hue, sat) {
+                            const color = sat === 0
+                                ? `rgba(255,255,255,${alpha})`
+                                : `hsla(${hue},${sat}%,85%,${alpha})`;
+                            ctx.save();
+                            ctx.globalAlpha = 1;
+                            ctx.strokeStyle = color;
+                            ctx.lineWidth = Math.max(0.6, r * 0.5);
+                            ctx.lineCap = 'round';
+
+                            // 4 arms at 0°, 90°, 180°, 270°
+                            for (let i = 0; i < 4; i++) {
+                                const a = (i * Math.PI) / 2;
+                                ctx.beginPath();
+                                ctx.moveTo(x, y);
+                                ctx.lineTo(x + Math.cos(a) * r * arms, y + Math.sin(a) * r * arms);
+                                ctx.stroke();
+                            }
+
+                            // Bright center dot
+                            ctx.beginPath();
+                            ctx.arc(x, y, r * 0.5, 0, Math.PI * 2);
+                            ctx.fillStyle = color;
+                            ctx.fill();
+
+                            ctx.restore();
+                        }
+
+                        let frame = 0;
+                        function animate() {
+                            ctx.clearRect(0, 0, W, H);
+
+                            // Amber background gradient
+                            const grad = ctx.createLinearGradient(0, 0, W, H);
+                            grad.addColorStop(0, 'rgba(160, 75, 0, 0.9)');
+                            grad.addColorStop(0.5, 'rgba(210, 130, 5, 0.9)');
+                            grad.addColorStop(1, 'rgba(150, 60, 0, 0.9)');
+                            ctx.fillStyle = grad;
+                            ctx.fillRect(0, 0, W, H);
+
+                            // Soft center glow
+                            const glow = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, W * 0.6);
+                            glow.addColorStop(0, 'rgba(255, 210, 80, 0.25)');
+                            glow.addColorStop(1, 'transparent');
+                            ctx.fillStyle = glow;
+                            ctx.fillRect(0, 0, W, H);
+
+                            for (const s of stars) {
+                                s.phase += s.speed;
+                                // Alpha pulses between 0.15 and 1.0
+                                const alpha = 0.15 + 0.85 * (0.5 + 0.5 * Math.sin(s.phase));
+                                drawStar(ctx, s.x, s.y, s.r, s.arms, alpha, s.hue, s.sat);
+                            }
+
+                            frame++;
+                            shimmerRAF = requestAnimationFrame(animate);
+                        }
+
+                        animate();
+                    };
+
+                    const stopSparkles = () => {
+                        if (shimmerRAF) {
+                            cancelAnimationFrame(shimmerRAF);
+                            shimmerRAF = null;
+                        }
+                        if (shimmerCanvas && shimmerCanvas.parentNode) {
+                            shimmerCanvas.parentNode.removeChild(shimmerCanvas);
+                            shimmerCanvas = null;
+                        }
+                    };
+
+                    shimmerBtn.addEventListener('click', () => {
+                        const isActive = shimmerBtn.classList.toggle('active');
+                        if (isActive) {
+                            startSparkles();
+                        } else {
+                            stopSparkles();
+                        }
+                        this.sendToPlugin('shimmerEnabled', isActive ? 1.0 : 0.0);
+                    });
+                }
+                
+                const freezeBtn = document.querySelector('[data-param="freezeEnabled"]');
+                if (freezeBtn) {
+                    let snowflakeRAF = null;
+                    let snowflakeCanvas = null;
+
+                    const startSnowflakes = () => {
+                        // Create canvas inside button
+                        snowflakeCanvas = document.createElement('canvas');
+                        snowflakeCanvas.className = 'freeze-canvas';
+                        const rect = freezeBtn.getBoundingClientRect();
+                        const W = freezeBtn.offsetWidth;
+                        const H = freezeBtn.offsetHeight;
+                        snowflakeCanvas.width = W;
+                        snowflakeCanvas.height = H;
+                        freezeBtn.insertBefore(snowflakeCanvas, freezeBtn.firstChild);
+
+                        const ctx = snowflakeCanvas.getContext('2d');
+
+                        // Snowflake particle data
+                        const flakes = Array.from({ length: 18 }, () => makeFlake(W, H, true));
+
+                        function makeFlake(W, H, randomY) {
+                            return {
+                                x: Math.random() * W,
+                                y: randomY ? Math.random() * H : -10,
+                                size: 4 + Math.random() * 10,
+                                speed: 0.3 + Math.random() * 0.5,
+                                drift: (Math.random() - 0.5) * 0.3,
+                                rotation: Math.random() * Math.PI * 2,
+                                rotSpeed: (Math.random() - 0.5) * 0.02,
+                                alpha: 0.5 + Math.random() * 0.5,
+                            };
+                        }
+
+                        // Draw a single 6-armed snowflake
+                        function drawSnowflake(ctx, x, y, size, rotation, alpha) {
+                            ctx.save();
+                            ctx.translate(x, y);
+                            ctx.rotate(rotation);
+                            ctx.globalAlpha = alpha;
+                            ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+                            ctx.lineWidth = Math.max(0.8, size * 0.08);
+                            ctx.lineCap = 'round';
+
+                            for (let i = 0; i < 6; i++) {
+                                ctx.save();
+                                ctx.rotate((i * Math.PI) / 3);
+
+                                // Main arm
+                                ctx.beginPath();
+                                ctx.moveTo(0, 0);
+                                ctx.lineTo(0, -size);
+                                ctx.stroke();
+
+                                // Two pairs of branches
+                                const b1 = size * 0.55;
+                                const b2 = size * 0.3;
+                                const bLen = size * 0.28;
+
+                                for (const [by, sign] of [[b1, 1], [b1, -1], [b2, 1], [b2, -1]]) {
+                                    ctx.beginPath();
+                                    ctx.moveTo(0, -by);
+                                    ctx.lineTo(sign * bLen * 0.6, -by - bLen * 0.6);
+                                    ctx.stroke();
+                                }
+
+                                // Tip diamond
+                                ctx.beginPath();
+                                ctx.moveTo(0, -size);
+                                ctx.lineTo(size * 0.08, -size + size * 0.12);
+                                ctx.lineTo(0, -size + size * 0.22);
+                                ctx.lineTo(-size * 0.08, -size + size * 0.12);
+                                ctx.closePath();
+                                ctx.stroke();
+
+                                ctx.restore();
+                            }
+
+                            // Center hexagon
+                            ctx.beginPath();
+                            for (let i = 0; i < 6; i++) {
+                                const angle = (i * Math.PI) / 3;
+                                const hx = Math.cos(angle) * size * 0.12;
+                                const hy = Math.sin(angle) * size * 0.12;
+                                i === 0 ? ctx.moveTo(hx, hy) : ctx.lineTo(hx, hy);
+                            }
+                            ctx.closePath();
+                            ctx.stroke();
+
+                            ctx.restore();
+                        }
+
+                        function animate() {
+                            // Blue gradient background
+                            const grad = ctx.createLinearGradient(0, 0, W, H);
+                            grad.addColorStop(0, 'rgba(0, 160, 210, 0.95)');
+                            grad.addColorStop(0.5, 'rgba(0, 190, 220, 0.95)');
+                            grad.addColorStop(1, 'rgba(0, 130, 200, 0.95)');
+                            ctx.fillStyle = grad;
+                            ctx.fillRect(0, 0, W, H);
+
+                            // Soft glow spots
+                            const glow = ctx.createRadialGradient(W * 0.3, H * 0.4, 0, W * 0.3, H * 0.4, W * 0.5);
+                            glow.addColorStop(0, 'rgba(180, 240, 255, 0.35)');
+                            glow.addColorStop(1, 'transparent');
+                            ctx.fillStyle = glow;
+                            ctx.fillRect(0, 0, W, H);
+
+                            for (const f of flakes) {
+                                drawSnowflake(ctx, f.x, f.y, f.size, f.rotation, f.alpha);
+                                f.y += f.speed;
+                                f.x += f.drift;
+                                f.rotation += f.rotSpeed;
+                                if (f.y > H + f.size) {
+                                    Object.assign(f, makeFlake(W, H, false));
+                                }
+                            }
+
+                            // Sparkle dots
+                            for (let i = 0; i < 6; i++) {
+                                const sx = (W * (i + 0.5)) / 6 + Math.sin(Date.now() * 0.001 + i) * 8;
+                                const sy = H * 0.3 + Math.cos(Date.now() * 0.0013 + i * 1.3) * H * 0.25;
+                                ctx.beginPath();
+                                ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
+                                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                                ctx.fill();
+                            }
+
+                            snowflakeRAF = requestAnimationFrame(animate);
+                        }
+
+                        animate();
+                    };
+
+                    const stopSnowflakes = () => {
+                        if (snowflakeRAF) {
+                            cancelAnimationFrame(snowflakeRAF);
+                            snowflakeRAF = null;
+                        }
+                        if (snowflakeCanvas && snowflakeCanvas.parentNode) {
+                            snowflakeCanvas.parentNode.removeChild(snowflakeCanvas);
+                            snowflakeCanvas = null;
+                        }
+                    };
+
+                    freezeBtn.addEventListener('click', () => {
+                        const isActive = freezeBtn.classList.toggle('active');
+                        if (isActive) {
+                            startSnowflakes();
+                        } else {
+                            stopSnowflakes();
+                        }
+                        this.sendToPlugin('freezeEnabled', isActive ? 1.0 : 0.0);
+                    });
+                }
+            },
+            
+            // Initialize reverse mode selector
+            initReverseSelector() {
+                document.querySelectorAll('.reverse-button').forEach(option => {
+                    option.addEventListener('click', () => {
+                        const mode = parseInt(option.dataset.reverseMode);
+                        
+                        document.querySelectorAll('.reverse-button').forEach(opt => {
+                            opt.classList.remove('active-reverb', 'active-delay', 'active-both', 'active-off');
+                        });
+                        
+                        if (mode === 1) {
+                            option.classList.add('active-reverb');
+                        } else if (mode === 2) {
+                            option.classList.add('active-delay');
+                        } else if (mode === 3) {
+                            option.classList.add('active-both');
+                        } else if (mode === 0) {
+                            option.classList.add('active-off');
+                        }
+                        
+                        this.sendToPlugin('reverseMode', mode / 3.0);
+                    });
+                });
+            },
+            
+            // Show context menu
+            showContextMenu(e, paramId) {
+                e.preventDefault();
+                
+                const menu = document.getElementById('contextMenu');
+                menu.style.display = 'block';
+                menu.style.left = e.clientX + 'px';
+                menu.style.top = e.clientY + 'px';
+                
+                menu.dataset.currentParam = paramId;
+                
+                const closeMenu = (event) => {
+                    if (!menu.contains(event.target)) {
+                        menu.style.display = 'none';
+                        document.removeEventListener('click', closeMenu);
+                    }
+                };
+                
+                setTimeout(() => {
+                    document.addEventListener('click', closeMenu);
+                }, 10);
+            },
+            
+            // Initialize context menu actions
+            initContextMenu() {
+                const resetItem = document.getElementById('resetToDefault');
+                if (resetItem) {
+                    resetItem.addEventListener('click', () => {
+                        const menu = document.getElementById('contextMenu');
+                        const paramId = menu.dataset.currentParam;
+                        
+                        if (paramId && this.defaults[paramId] !== undefined) {
+                            const normalized = this.valueToNormalized(paramId, this.defaults[paramId]);
+                            this.updateParam(paramId, normalized, true);
+                        }
+                        
+                        menu.style.display = 'none';
+                    });
+                }
+            },
+            
+            // Show value input for direct entry
+            showValueInput(e, paramId, knobElement) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const input = document.getElementById('valueInput');
+                const rect = knobElement.getBoundingClientRect();
+                const appRect = document.getElementById('app').getBoundingClientRect();
+
+                const inputW = 58;
+                const inputH = 24;
+
+                // Center over the knob in app-relative coords
+                let left = (rect.left - appRect.left) + (rect.width / 2) - (inputW / 2);
+                let top  = (rect.top  - appRect.top)  + (rect.height / 2) - (inputH / 2);
+
+                // Clamp so it never goes outside the plugin bounds
+                const padding = 4;
+                left = Math.max(padding, Math.min(left, 900 - inputW - padding));
+                top  = Math.max(padding, Math.min(top,  620 - inputH - padding));
+
+                input.style.width   = inputW + 'px';
+                input.style.display = 'block';
+                input.style.left    = left + 'px';
+                input.style.top     = top  + 'px';
+                
+                const currentValue = this.normalizedToValue(paramId, this.params[paramId] ?? 0.5);
+                input.value = currentValue.toFixed(2);
+                input.focus();
+                input.select();
+                
+                input.dataset.currentParam = paramId;
+                
+                // Remove any existing listeners to prevent duplicates
+                const newInput = input.cloneNode(true);
+                input.parentNode.replaceChild(newInput, input);
+
+                // Re-apply styles after clone
+                newInput.style.width   = inputW + 'px';
+                newInput.style.display = 'block';
+                newInput.style.left    = left + 'px';
+                newInput.style.top     = top  + 'px';
+                newInput.value = currentValue.toFixed(2);
+                newInput.dataset.currentParam = paramId;
+                newInput.focus();
+                newInput.select();
+                
+                const onSubmit = () => {
+                    const newValue = parseFloat(newInput.value);
+                    const targetParamId = newInput.dataset.currentParam;
+                    if (!isNaN(newValue) && targetParamId) {
+                        const normalized = this.valueToNormalized(targetParamId, newValue);
+                        this.updateParam(targetParamId, Math.max(0, Math.min(1, normalized)), true);
+                    }
+                    newInput.style.display = 'none';
+                };
+                
+                newInput.addEventListener('blur', () => newInput.style.display = 'none', { once: true });
+                newInput.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') newInput.style.display = 'none';
+                    else if (event.key === 'Enter') onSubmit();
+                });
+            },
+            
+            // Update BPM display (called from C++)
+            updateBPMDisplay(bpm, division) {
+                this.currentBPM = bpm;
+                const bpmDisplay = document.querySelector('[data-bpm-display="delayTime"]');
+                
+                if (bpmDisplay) {
+                    const divisionNames = [
+                        '1/32', '1/32D', '1/32T',
+                        '1/16', '1/16D', '1/16T',
+                        '1/8', '1/8D', '1/8T',
+                        '1/4', '1/4D', '1/4T',
+                        '1/2', '1/2D', '1/2T',
+                        '1/1', '1/1D', '1/1T'
+                    ];
+                    
+                    const divisionName = divisionNames[division] || '1/4';
+                    bpmDisplay.textContent = divisionName;
+                    bpmDisplay.classList.add('visible');
+                }
+            },
+            
+            // Hide BPM display when sync is off
+            hideBPMDisplay() {
+                const bpmDisplay = document.querySelector('[data-bpm-display="delayTime"]');
+                if (bpmDisplay) {
+                    bpmDisplay.classList.remove('visible');
+                }
+            }
+        };
+        
+        // Initialize flowstate on DOM ready
+        window.addEventListener('DOMContentLoaded', () => {
+            window.flowstate.init();
+        });
+
+        // Particle system — runs immediately, no DOMContentLoaded wrapper needed
+        // because this script is at the bottom of <body> and the canvas already exists
+        (function startParticles() {
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            const W = 900, H = 620;
+            const COUNT = 70;
+
+            const COLORS = [
+                { r: 62,  g: 207, b: 207 },  // teal
+                { r: 232, g: 168, b: 56  },  // amber
+                { r: 255, g: 255, b: 255 },  // white
+            ];
+
+            function randomColor() {
+                const c = COLORS[Math.floor(Math.random() * COLORS.length)];
+                const isWhite = c.r === 255 && c.g === 255;
+                const alpha = isWhite
+                    ? 0.2 + Math.random() * 0.1
+                    : 0.4 + Math.random() * 0.2;
+                return { ...c, baseAlpha: alpha };
+            }
+
+            function makeParticle(x) {
+                const col = randomColor();
+                return {
+                    x: x !== undefined ? x : Math.random() * W,
+                    y: Math.random() * H,
+                    r: 0.8 + Math.random() * 2.2,
+                    speed: 0.2 + Math.random() * 0.6,
+                    col,
+                };
+            }
+
+            const particles = Array.from({ length: COUNT }, () => makeParticle());
+
+            function draw() {
+                console.log('particles running');
+                ctx.clearRect(0, 0, W, H);
+
+                for (const p of particles) {
+                    let alpha = p.col.baseAlpha;
+                    if (p.x < 60)      alpha *= p.x / 60;
+                    if (p.x > W - 60)  alpha *= (W - p.x) / 60;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${p.col.r},${p.col.g},${p.col.b},${alpha})`;
+                    ctx.fill();
+
+                    p.x -= p.speed;
+
+                    if (p.x < -p.r) {
+                        const reset = makeParticle(W + p.r);
+                        p.x = reset.x;
+                        p.y = reset.y;
+                        p.r = reset.r;
+                        p.speed = reset.speed;
+                        p.col = reset.col;
+                    }
+                }
+
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        })();
+    </script>
+</body>
+</html>

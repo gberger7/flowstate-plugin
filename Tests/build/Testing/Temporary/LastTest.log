@@ -1,0 +1,679 @@
+Start testing: Mar 18 21:24 PDT
+----------------------------------------------------------
+1/14 Testing: DelayEnginePropertyTests
+1/14 Test: DelayEnginePropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/DelayEnginePropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"DelayEnginePropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 3 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 1: Parameter Range Validation - Delay Time Clamping
+[Feature: flowstate-plugin, Property 1]
+-------------------------------------------------------------------------------
+  Delay time parameter correctly clamps to 1-2000ms range
+PASSED
+
+-------------------------------------------------------------------------------
+Property 2: BPM Sync Delay Time Calculation
+[Feature: flowstate-plugin, Property 2]
+-------------------------------------------------------------------------------
+  BPM sync delay time calculations work correctly across all divisions
+PASSED
+
+-------------------------------------------------------------------------------
+Property 4: Feedback Limiting - No output exceeds unity gain at 90%+ feedback
+[Feature: flowstate-plugin, Property 4]
+-------------------------------------------------------------------------------
+  Feedback limiting prevents output from exceeding unity gain at 90%+ feedback
+PASSED
+
+===============================================================================
+Test results: 3 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.69 sec
+----------------------------------------------------------
+Test Passed.
+"DelayEnginePropertyTests" end time: Mar 18 21:24 PDT
+"DelayEnginePropertyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/14 Testing: ReverbEnginePropertyTests
+2/14 Test: ReverbEnginePropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/ReverbEnginePropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"ReverbEnginePropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 4 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 1: Parameter Range Validation - ReverbEngine Parameters
+[Feature: flowstate-plugin, Property 1]
+-------------------------------------------------------------------------------
+  ReverbEngine parameters correctly clamp to their valid ranges
+PASSED
+
+-------------------------------------------------------------------------------
+ReverbEngine: Size parameter affects early reflection density
+[Feature: flowstate-plugin]
+-------------------------------------------------------------------------------
+  Size parameter successfully modifies reverb character
+PASSED
+
+-------------------------------------------------------------------------------
+ReverbEngine: Decay time parameter affects reverb tail length
+[Feature: flowstate-plugin]
+-------------------------------------------------------------------------------
+  Decay time parameter successfully affects reverb tail length
+PASSED
+
+-------------------------------------------------------------------------------
+ReverbEngine: Damping parameter affects frequency content
+[Feature: flowstate-plugin]
+-------------------------------------------------------------------------------
+  Damping parameter successfully affects frequency content
+PASSED
+
+===============================================================================
+Test results: 4 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.35 sec
+----------------------------------------------------------
+Test Passed.
+"ReverbEnginePropertyTests" end time: Mar 18 21:24 PDT
+"ReverbEnginePropertyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/14 Testing: FeedbackProcessorPropertyTests
+3/14 Test: FeedbackProcessorPropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/FeedbackProcessorPropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"FeedbackProcessorPropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 2 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 11: Drive Zero Bypass - No saturation when drive=0%
+[Feature: flowstate-plugin, Property 11]
+-------------------------------------------------------------------------------
+  Drive=0% correctly bypasses saturation processing
+PASSED
+
+-------------------------------------------------------------------------------
+Property 12: Tone Zero Bypass - No filtering when tone=0%
+[Feature: flowstate-plugin, Property 12]
+-------------------------------------------------------------------------------
+  Tone=0% correctly preserves frequency spectrum without filtering
+PASSED
+
+===============================================================================
+Test results: 2 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Passed.
+"FeedbackProcessorPropertyTests" end time: Mar 18 21:24 PDT
+"FeedbackProcessorPropertyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/14 Testing: ModulationEnginePropertyTests
+4/14 Test: ModulationEnginePropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/ModulationEnginePropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"ModulationEnginePropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 2 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 8: Modulation Depth Zero Bypass - No modulation when depth=0%
+[Feature: flowstate-plugin, Property 8]
+-------------------------------------------------------------------------------
+  Modulation depth=0% produces no modulation output
+PASSED
+
+-------------------------------------------------------------------------------
+Property 10: LFO Waveform Shape - Validate sine wave pattern within 2% tolerance
+[Feature: flowstate-plugin, Property 10]
+-------------------------------------------------------------------------------
+  LFO produces accurate sine wave within 2% tolerance
+PASSED
+
+===============================================================================
+Test results: 2 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.59 sec
+----------------------------------------------------------
+Test Passed.
+"ModulationEnginePropertyTests" end time: Mar 18 21:24 PDT
+"ModulationEnginePropertyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/14 Testing: DuckingProcessorPropertyTests
+5/14 Test: DuckingProcessorPropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/DuckingProcessorPropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"DuckingProcessorPropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 2 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 13: Ducking Sensitivity Zero Bypass - No attenuation when sensitivity=0%
+[Feature: flowstate-plugin, Property 13]
+-------------------------------------------------------------------------------
+  Sensitivity=0% correctly bypasses ducking attenuation
+PASSED
+
+-------------------------------------------------------------------------------
+Property 14: Ducking Attenuates Wet Only - Verify dry signal unchanged
+[Feature: flowstate-plugin, Property 14]
+-------------------------------------------------------------------------------
+  Ducking correctly attenuates only wet signal while preserving dry signal
+PASSED
+
+===============================================================================
+Test results: 2 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Passed.
+"DuckingProcessorPropertyTests" end time: Mar 18 21:24 PDT
+"DuckingProcessorPropertyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/14 Testing: PluginProcessorIntegrationTest
+6/14 Test: PluginProcessorIntegrationTest
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/PluginProcessorIntegrationTest"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"PluginProcessorIntegrationTest" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+=== FlowstateProcessor Integration Tests ===
+
+Testing processor initialization...
+✓ Processor initialization test passed
+Testing parameter count...
+✓ Parameter count test passed (21 parameters)
+Testing prepareToPlay...
+✓ PrepareToPlay test passed
+Testing processBlock...
+✓ ProcessBlock test passed
+Testing state serialization...
+✓ State serialization test passed
+Testing parameter ranges...
+✓ Parameter ranges test passed
+Testing freeze toggle...
+✓ Freeze toggle test passed
+
+=== All tests passed! ===
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"PluginProcessorIntegrationTest" end time: Mar 18 21:24 PDT
+"PluginProcessorIntegrationTest" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/14 Testing: SignalFlowPropertyTests
+7/14 Test: SignalFlowPropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/SignalFlowPropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"SignalFlowPropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 6 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 5: Blend Crossfade Ratio - Verify delay:reverb ratio equals (1-blend):blend
+[Feature: flowstate-plugin, Property 5]
+-------------------------------------------------------------------------------
+  Blend crossfade ratio verified across random blend values
+PASSED
+
+-------------------------------------------------------------------------------
+Property 6: Mix Independence from Blend - Verify blend doesn't affect wet/dry ratio
+[Feature: flowstate-plugin, Property 6]
+-------------------------------------------------------------------------------
+  Mix parameter operates independently of blend parameter
+PASSED
+
+-------------------------------------------------------------------------------
+Property 7: Mix Crossfade Ratio - Verify dry:wet ratio equals (1-mix):mix
+[Feature: flowstate-plugin, Property 7]
+-------------------------------------------------------------------------------
+  Mix crossfade ratio verified across random mix values
+PASSED
+
+-------------------------------------------------------------------------------
+Property 9: Modulation Affects Multiple Targets - Verify LFO modulates both delay and reverb
+[Feature: flowstate-plugin, Property 9]
+-------------------------------------------------------------------------------
+  Modulation affects multiple targets (delay and reverb)
+PASSED
+
+-------------------------------------------------------------------------------
+Property 29: Signal Path Splitting - Verify dry path remains unprocessed
+[Feature: flowstate-plugin, Property 29]
+-------------------------------------------------------------------------------
+  Dry signal path remains unprocessed when mix=0
+PASSED
+
+-------------------------------------------------------------------------------
+Property 30: Output Gain Final Stage - Verify gain applied last to both paths
+[Feature: flowstate-plugin, Property 30]
+-------------------------------------------------------------------------------
+  Output gain is applied as final stage to both dry and wet paths
+PASSED
+
+===============================================================================
+Test results: 6 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   7.02 sec
+----------------------------------------------------------
+Test Passed.
+"SignalFlowPropertyTests" end time: Mar 18 21:24 PDT
+"SignalFlowPropertyTests" time elapsed: 00:00:07
+----------------------------------------------------------
+
+8/14 Testing: FreezePropertyTests
+8/14 Test: FreezePropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/FreezePropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"FreezePropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 2 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 17: Freeze Preserves Dry Signal - Verify dry signal unchanged when frozen
+[Feature: flowstate-plugin, Property 17]
+-------------------------------------------------------------------------------
+  Freeze preserves dry signal across all test iterations
+PASSED
+
+-------------------------------------------------------------------------------
+Property 18: Freeze Independence from Blend - Verify blend changes don't affect frozen content
+[Feature: flowstate-plugin, Property 18]
+-------------------------------------------------------------------------------
+  Frozen content remains independent of blend parameter changes
+PASSED
+
+===============================================================================
+Test results: 2 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   3.72 sec
+----------------------------------------------------------
+Test Passed.
+"FreezePropertyTests" end time: Mar 18 21:24 PDT
+"FreezePropertyTests" time elapsed: 00:00:03
+----------------------------------------------------------
+
+9/14 Testing: StateManagementPropertyTests
+9/14 Test: StateManagementPropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/StateManagementPropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"StateManagementPropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 4 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 22: State Serialization Round Trip - Verify all 21 parameters survive save/load
+[Feature: flowstate-plugin, Property 22]
+-------------------------------------------------------------------------------
+  All 21 parameters survive serialization round trip
+PASSED
+
+-------------------------------------------------------------------------------
+State Serialization with Default Values
+[Feature: flowstate-plugin, Property 22]
+-------------------------------------------------------------------------------
+  Default parameter values survive serialization
+PASSED
+
+-------------------------------------------------------------------------------
+State Serialization with Extreme Values
+[Feature: flowstate-plugin, Property 22]
+-------------------------------------------------------------------------------
+  Extreme parameter values (0.0 and 1.0) survive serialization
+PASSED
+
+-------------------------------------------------------------------------------
+Multiple Serialization Cycles
+[Feature: flowstate-plugin, Property 22]
+-------------------------------------------------------------------------------
+  Parameters survive multiple serialization cycles without degradation
+PASSED
+
+===============================================================================
+Test results: 4 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.69 sec
+----------------------------------------------------------
+Test Passed.
+"StateManagementPropertyTests" end time: Mar 18 21:24 PDT
+"StateManagementPropertyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/14 Testing: AudioQualityPropertyTests
+10/14 Test: AudioQualityPropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/AudioQualityPropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"AudioQualityPropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 5 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 21: Parameter Smoothing - Verify no zipper noise with rapid parameter changes
+[Feature: flowstate-plugin, Property 21]
+-------------------------------------------------------------------------------
+  No zipper noise detected with rapid parameter changes
+PASSED
+
+-------------------------------------------------------------------------------
+Property 23: Stereo Processing Preservation - Verify 2-channel in, 2-channel out
+[Feature: flowstate-plugin, Property 23]
+-------------------------------------------------------------------------------
+  Stereo processing preserved: 2-channel in, 2-channel out
+PASSED
+
+-------------------------------------------------------------------------------
+Property 24: No Audio Dropouts - Verify continuous output with random parameter combinations
+[Feature: flowstate-plugin, Property 24]
+-------------------------------------------------------------------------------
+  No audio dropouts detected with random parameter combinations
+PASSED
+
+-------------------------------------------------------------------------------
+No Dropouts During Parameter Changes
+[Feature: flowstate-plugin, Property 24]
+-------------------------------------------------------------------------------
+  No dropouts occur during parameter changes
+PASSED
+
+-------------------------------------------------------------------------------
+Smooth Transitions on Freeze Toggle
+[Feature: flowstate-plugin, Property 21]
+-------------------------------------------------------------------------------
+  Freeze toggle produces no clicks or artifacts
+PASSED
+
+===============================================================================
+Test results: 5 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =  24.51 sec
+----------------------------------------------------------
+Test Passed.
+"AudioQualityPropertyTests" end time: Mar 18 21:24 PDT
+"AudioQualityPropertyTests" time elapsed: 00:00:24
+----------------------------------------------------------
+
+11/14 Testing: ShimmerProcessorPropertyTests
+11/14 Test: ShimmerProcessorPropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/ShimmerProcessorPropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"ShimmerProcessorPropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 1 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 15: Shimmer at 0 semitones preserves signal amplitude
+[Feature: flowstate-plugin, Property 15]
+-------------------------------------------------------------------------------
+  Shimmer at 0 semitones preserves signal amplitude
+PASSED
+
+===============================================================================
+Test results: 1 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Passed.
+"ShimmerProcessorPropertyTests" end time: Mar 18 21:24 PDT
+"ShimmerProcessorPropertyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/14 Testing: StereoWidthProcessorPropertyTests
+12/14 Test: StereoWidthProcessorPropertyTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/StereoWidthProcessorPropertyTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"StereoWidthProcessorPropertyTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 2 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Property 19: Stereo Width Mono Collapse - Verify L=R when width=0%
+[Feature: flowstate-plugin, Property 19]
+-------------------------------------------------------------------------------
+  Width=0% correctly collapses stereo to mono (L=R)
+PASSED
+
+-------------------------------------------------------------------------------
+Property 20: Width Affects Wet Signal Only - Verify dry signal unchanged
+[Feature: flowstate-plugin, Property 20]
+-------------------------------------------------------------------------------
+  Width processor correctly affects only wet signal path, dry signal remains unchanged
+PASSED
+
+===============================================================================
+Test results: 2 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"StereoWidthProcessorPropertyTests" end time: Mar 18 21:24 PDT
+"StereoWidthProcessorPropertyTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/14 Testing: SignalPathIntegrationTests
+13/14 Test: SignalPathIntegrationTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/SignalPathIntegrationTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"SignalPathIntegrationTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 8 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Full signal path: input → split → blend → mix → output produces valid audio
+[integration][signal-path]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Mix=0 passes dry signal with no wet contribution
+[integration][signal-path]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Mix=1 produces wet-only output
+[integration][signal-path]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Random parameter combinations produce valid (non-NaN, non-Inf) output
+[integration][parameter-combinations]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Switching delay sync mode produces no NaN or Inf
+[integration][mode-switching]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Cycling through reverse modes (OFF/REVERB/DELAY/BOTH) produces no NaN or Inf
+[integration][mode-switching]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Freeze activation and deactivation produces no large transients
+[integration][freeze]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Stereo integrity: 2-channel input produces 2-channel output
+[integration][signal-path]
+-------------------------------------------------------------------------------
+PASSED
+
+===============================================================================
+Test results: 8 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.36 sec
+----------------------------------------------------------
+Test Passed.
+"SignalPathIntegrationTests" end time: Mar 18 21:24 PDT
+"SignalPathIntegrationTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/14 Testing: DAWCompatibilityTests
+14/14 Test: DAWCompatibilityTests
+Command: "/Users/gabealtenberger/Coding/Flowstate/Tests/build/DAWCompatibilityTests"
+Directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+"DAWCompatibilityTests" start time: Mar 18 21:24 PDT
+Output:
+----------------------------------------------------------
+
+===============================================================================
+Running 10 test cases...
+===============================================================================
+
+-------------------------------------------------------------------------------
+Plugin name is non-empty
+[daw-compat][metadata]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Plugin does not accept or produce MIDI
+[daw-compat][metadata]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Plugin supports stereo in/out and rejects mono
+[daw-compat][metadata]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+Plugin has editor and valid tail length
+[daw-compat][metadata]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+All 21 parameters are registered in APVTS
+[daw-compat][parameters]
+-------------------------------------------------------------------------------
+PASSED
+
+-------------------------------------------------------------------------------
+All parameters accept normalised values and produce valid audio
+[daw-compat][automation]
+-------------------------------------------------------------------------------
+  All parameters automatable without crashing
+PASSED
+
+-------------------------------------------------------------------------------
+State serialization round-trip preserves all 21 parameter values
+[daw-compat][state]
+-------------------------------------------------------------------------------
+  State round-trip preserves all 21 parameters
+PASSED
+
+-------------------------------------------------------------------------------
+Corrupted state data does not crash the plugin
+[daw-compat][state]
+-------------------------------------------------------------------------------
+  Corrupted state handled gracefully
+PASSED
+
+-------------------------------------------------------------------------------
+Multiple prepareToPlay / releaseResources cycles are safe
+[daw-compat][lifecycle]
+-------------------------------------------------------------------------------
+  Multiple prepare/release cycles safe
+PASSED
+
+-------------------------------------------------------------------------------
+Plugin handles common DAW sample rates and block sizes
+[daw-compat][sample-rates]
+-------------------------------------------------------------------------------
+  All sample rates and block sizes produce valid output
+PASSED
+
+===============================================================================
+Test results: 10 passed, 0 failed
+===============================================================================
+<end of output>
+Test time =   0.78 sec
+----------------------------------------------------------
+Test Passed.
+"DAWCompatibilityTests" end time: Mar 18 21:24 PDT
+"DAWCompatibilityTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Mar 18 21:24 PDT

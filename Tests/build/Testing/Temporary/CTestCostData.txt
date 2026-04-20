@@ -1,0 +1,15 @@
+DelayEnginePropertyTests 5 0.138505
+ReverbEnginePropertyTests 5 0.0691219
+FeedbackProcessorPropertyTests 3 0.0841043
+ModulationEnginePropertyTests 5 0.118952
+DuckingProcessorPropertyTests 4 0.0625381
+PluginProcessorIntegrationTest 4 0.0676917
+SignalFlowPropertyTests 3 2.34121
+FreezePropertyTests 3 1.23844
+StateManagementPropertyTests 4 0.173634
+AudioQualityPropertyTests 2 12.2555
+ShimmerProcessorPropertyTests 2 0.123751
+StereoWidthProcessorPropertyTests 2 0.0145914
+SignalPathIntegrationTests 2 0.178006
+DAWCompatibilityTests 1 0.783848
+---

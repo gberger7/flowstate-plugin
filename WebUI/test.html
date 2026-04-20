@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowstate UI Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        iframe {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .info {
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        .console {
+            background: #1a1a1a;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+        
+        .console-line {
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <iframe src="index.html" width="900" height="500"></iframe>
+        <div class="info">
+            <strong>Flowstate Plugin UI Test</strong><br>
+            This is a standalone test of the WebView UI. In the actual plugin, this will be rendered through JUCE's WebBrowserComponent.
+        </div>
+        <div class="console" id="console">
+            <div class="console-line">Console output will appear here...</div>
+        </div>
+    </div>
+    
+    <script>
+        // Mock JUCE interface for testing
+        window.__juce__ = {
+            postMessage: function(message) {
+                const consoleEl = document.getElementById('console');
+                const line = document.createElement('div');
+                line.className = 'console-line';
+                line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                consoleEl.appendChild(line);
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+            }
+        };
+        
+        // Listen for messages from iframe
+        window.addEventListener('message', (event) => {
+            console.log('Message from iframe:', event.data);
+        });
+        
+        // Simulate automation updates
+        let automationInterval = null;
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'a') {
+                // Start automation simulation
+                if (!automationInterval) {
+                    console.log('Starting automation simulation...');
+                    let value = 0;
+                    automationInterval = setInterval(() => {
+                        value = (value + 0.01) % 1.0;
+                        const iframe = document.querySelector('iframe');
+                        if (iframe && iframe.contentWindow && iframe.contentWindow.flowstate) {
+                            iframe.contentWindow.flowstate.updateParam('blend', value, false);
+                        }
+                    }, 50);
+                }
+            } else if (e.key === 's') {
+                // Stop automation
+                if (automationInterval) {
+                    clearInterval(automationInterval);
+                    automationInterval = null;
+                    console.log('Stopped automation simulation');
+                }
+            }
+        });
+        
+        console.log('Test page loaded. Press "a" to start automation simulation, "s" to stop.');
+    </script>
+</body>
+</html>

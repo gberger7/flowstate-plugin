@@ -1,0 +1,35 @@
+# CMake generated Testfile for 
+# Source directory: /Users/gabealtenberger/Coding/Flowstate/Tests
+# Build directory: /Users/gabealtenberger/Coding/Flowstate/Tests/build
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+add_test(DelayEnginePropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/DelayEnginePropertyTests")
+set_tests_properties(DelayEnginePropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;359;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(ReverbEnginePropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/ReverbEnginePropertyTests")
+set_tests_properties(ReverbEnginePropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;360;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(FeedbackProcessorPropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/FeedbackProcessorPropertyTests")
+set_tests_properties(FeedbackProcessorPropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;361;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(ModulationEnginePropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/ModulationEnginePropertyTests")
+set_tests_properties(ModulationEnginePropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;362;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(DuckingProcessorPropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/DuckingProcessorPropertyTests")
+set_tests_properties(DuckingProcessorPropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;363;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(PluginProcessorIntegrationTest "/Users/gabealtenberger/Coding/Flowstate/Tests/build/PluginProcessorIntegrationTest")
+set_tests_properties(PluginProcessorIntegrationTest PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;364;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(SignalFlowPropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/SignalFlowPropertyTests")
+set_tests_properties(SignalFlowPropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;365;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(FreezePropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/FreezePropertyTests")
+set_tests_properties(FreezePropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;366;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(StateManagementPropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/StateManagementPropertyTests")
+set_tests_properties(StateManagementPropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;367;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(AudioQualityPropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/AudioQualityPropertyTests")
+set_tests_properties(AudioQualityPropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;368;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(ShimmerProcessorPropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/ShimmerProcessorPropertyTests")
+set_tests_properties(ShimmerProcessorPropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;369;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(StereoWidthProcessorPropertyTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/StereoWidthProcessorPropertyTests")
+set_tests_properties(StereoWidthProcessorPropertyTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;370;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(SignalPathIntegrationTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/SignalPathIntegrationTests")
+set_tests_properties(SignalPathIntegrationTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;371;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+add_test(DAWCompatibilityTests "/Users/gabealtenberger/Coding/Flowstate/Tests/build/DAWCompatibilityTests")
+set_tests_properties(DAWCompatibilityTests PROPERTIES  _BACKTRACE_TRIPLES "/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;372;add_test;/Users/gabealtenberger/Coding/Flowstate/Tests/CMakeLists.txt;0;")
+subdirs("JUCE")

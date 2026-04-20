@@ -1,0 +1,40 @@
+# JUCE Build Artifacts
+Builds/
+JuceLibraryCode/
+
+# IDE Files
+*.xcodeproj
+*.xcworkspace
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+.vs/
+.vscode/
+*.suo
+*.user
+
+# Compiled Files
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.vst3
+*.component
+
+# macOS
+.DS_Store
+*.dSYM
+
+# Windows
+*.pdb
+*.ilk
+*.exp
+
+# Temporary Files
+*~
+*.swp
+*.swo

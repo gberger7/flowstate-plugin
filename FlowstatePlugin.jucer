@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="FlowPl" name="FlowstatePlugin" projectType="audioplug" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="1.0.0"
+              companyName="Flowstate Audio" companyCopyright="2024 Flowstate Audio"
+              pluginFormats="buildVST3,buildAU" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginManufacturerCode="Flow" pluginCode="Flst" aaxIdentifier="com.flowstateaudio.flowstateplugin"
+              pluginAAXCategory="2" cppLanguageStandard="17">
+  <MAINGROUP id="qwerty" name="FlowstatePlugin">
+    <GROUP id="{SOURCE_GROUP}" name="Source">
+      <GROUP id="{DSP_GROUP}" name="DSP">
+        <FILE id="delay_h" name="DelayEngine.h" compile="0" resource="0" file="Source/DSP/DelayEngine.h"/>
+        <FILE id="delay_cpp" name="DelayEngine.cpp" compile="1" resource="0" file="Source/DSP/DelayEngine.cpp"/>
+        <FILE id="reverb_h" name="ReverbEngine.h" compile="0" resource="0" file="Source/DSP/ReverbEngine.h"/>
+        <FILE id="reverb_cpp" name="ReverbEngine.cpp" compile="1" resource="0" file="Source/DSP/ReverbEngine.cpp"/>
+        <FILE id="feedback_h" name="FeedbackProcessor.h" compile="0" resource="0" file="Source/DSP/FeedbackProcessor.h"/>
+        <FILE id="feedback_cpp" name="FeedbackProcessor.cpp" compile="1" resource="0" file="Source/DSP/FeedbackProcessor.cpp"/>
+        <FILE id="ducking_h" name="DuckingProcessor.h" compile="0" resource="0" file="Source/DSP/DuckingProcessor.h"/>
+        <FILE id="ducking_cpp" name="DuckingProcessor.cpp" compile="1" resource="0" file="Source/DSP/DuckingProcessor.cpp"/>
+        <FILE id="shimmer_h" name="ShimmerProcessor.h" compile="0" resource="0" file="Source/DSP/ShimmerProcessor.h"/>
+        <FILE id="shimmer_cpp" name="ShimmerProcessor.cpp" compile="1" resource="0" file="Source/DSP/ShimmerProcessor.cpp"/>
+        <FILE id="modulation_h" name="ModulationEngine.h" compile="0" resource="0" file="Source/DSP/ModulationEngine.h"/>
+        <FILE id="modulation_cpp" name="ModulationEngine.cpp" compile="1" resource="0" file="Source/DSP/ModulationEngine.cpp"/>
+        <FILE id="width_h" name="StereoWidthProcessor.h" compile="0" resource="0" file="Source/DSP/StereoWidthProcessor.h"/>
+        <FILE id="width_cpp" name="StereoWidthProcessor.cpp" compile="1" resource="0" file="Source/DSP/StereoWidthProcessor.cpp"/>
+        <FILE id="reverse_h" name="ReverseBuffer.h" compile="0" resource="0" file="Source/DSP/ReverseBuffer.h"/>
+        <FILE id="reverse_cpp" name="ReverseBuffer.cpp" compile="1" resource="0" file="Source/DSP/ReverseBuffer.cpp"/>
+      </GROUP>
+      <GROUP id="{BRIDGE_GROUP}" name="Bridge">
+        <FILE id="bridgekeep" name=".gitkeep" compile="0" resource="0" file="Source/Bridge/.gitkeep"/>
+      </GROUP>
+      <FILE id="params" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
+      <FILE id="processor_h" name="PluginProcessor.h" compile="0" resource="0" file="Source/PluginProcessor.h"/>
+      <FILE id="processor_cpp" name="PluginProcessor.cpp" compile="1" resource="0" file="Source/PluginProcessor.cpp"/>
+    </GROUP>
+    <GROUP id="{WEBUI_GROUP}" name="WebUI">
+      <GROUP id="{FONTS_GROUP}" name="fonts">
+        <FILE id="fontskeep" name=".gitkeep" compile="0" resource="0" file="WebUI/fonts/.gitkeep"/>
+      </GROUP>
+    </GROUP>
+  </MAINGROUP>
+  <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"
+               JUCE_WEB_BROWSER="1"/>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" extraCompilerFlags="-Wall -Wextra -Wpedantic"
+               extraLinkerFlags="" externalLibraries="" smallIcon="" bigIcon="">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="FlowstatePlugin" osxCompatibility="10.13 SDK"
+                       osxArchitecture="Native" recommendedWarnings="LLVM"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="FlowstatePlugin" osxCompatibility="10.13 SDK"
+                       osxArchitecture="Native" recommendedWarnings="LLVM" optimisation="3"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path=""/>
+        <MODULEPATH id="juce_audio_devices" path=""/>
+        <MODULEPATH id="juce_audio_formats" path=""/>
+        <MODULEPATH id="juce_audio_plugin_client" path=""/>
+        <MODULEPATH id="juce_audio_processors" path=""/>
+        <MODULEPATH id="juce_audio_utils" path=""/>
+        <MODULEPATH id="juce_core" path=""/>
+        <MODULEPATH id="juce_data_structures" path=""/>
+        <MODULEPATH id="juce_dsp" path=""/>
+        <MODULEPATH id="juce_events" path=""/>
+        <MODULEPATH id="juce_graphics" path=""/>
+        <MODULEPATH id="juce_gui_basics" path=""/>
+        <MODULEPATH id="juce_gui_extra" path=""/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+    <VS2022 targetFolder="Builds/VisualStudio2022" extraCompilerFlags="/W4"
+            extraLinkerFlags="" externalLibraries="" smallIcon="" bigIcon="">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="FlowstatePlugin" useRuntimeLibDLL="1"
+                       winArchitecture="x64" debugInformationFormat="ProgramDatabase"
+                       enablePluginBinaryCopyStep="0" linkTimeOptimisation="0" fastMath="0"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="FlowstatePlugin" useRuntimeLibDLL="1"
+                       winArchitecture="x64" debugInformationFormat="None"
+                       enablePluginBinaryCopyStep="0" linkTimeOptimisation="1" fastMath="1"
+                       optimisation="3"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path=""/>
+        <MODULEPATH id="juce_audio_devices" path=""/>
+        <MODULEPATH id="juce_audio_formats" path=""/>
+        <MODULEPATH id="juce_audio_plugin_client" path=""/>
+        <MODULEPATH id="juce_audio_processors" path=""/>
+        <MODULEPATH id="juce_audio_utils" path=""/>
+        <MODULEPATH id="juce_core" path=""/>
+        <MODULEPATH id="juce_data_structures" path=""/>
+        <MODULEPATH id="juce_dsp" path=""/>
+        <MODULEPATH id="juce_events" path=""/>
+        <MODULEPATH id="juce_graphics" path=""/>
+        <MODULEPATH id="juce_gui_basics" path=""/>
+        <MODULEPATH id="juce_gui_extra" path=""/>
+      </MODULEPATHS>
+    </VS2022>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+</JUCERPROJECT>

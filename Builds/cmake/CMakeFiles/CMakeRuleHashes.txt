@@ -1,0 +1,4 @@
+# Hashes of file build rules.
+4d6f70d22c46a7dfe000d49492ebf899 FlowstatePlugin_artefacts/JuceLibraryCode/FlowstatePlugin_AU/PkgInfo
+a4044536bb65d2371c42ab537a136bd2 FlowstatePlugin_artefacts/JuceLibraryCode/FlowstatePlugin_VST3/PkgInfo
+9947ee80988e73ff9eec5aae7566c262 juce_binarydata_FlowstateWebUI/JuceLibraryCode/BinaryData1.cpp

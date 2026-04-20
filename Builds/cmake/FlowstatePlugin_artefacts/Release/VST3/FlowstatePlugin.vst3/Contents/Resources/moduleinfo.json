@@ -1,0 +1,50 @@
+{
+  "Name": "FlowstatePlugin",
+  "Version": "1.0.0",
+  "Factory Info": {
+    "Vendor": "Flowstate Audio",
+    "URL": "",
+    "E-Mail": "",
+    "Flags": {
+      "Unicode": true,
+      "Classes Discardable": false,
+      "Component Non Discardable": false,
+    },
+  },
+  "Classes": [
+    {
+      "CID": "ABCDEF019182FAEB466C6F77466C7374",
+      "Category": "Audio Module Class",
+      "Name": "FlowstatePlugin",
+      "Vendor": "Flowstate Audio",
+      "Version": "1.0.0",
+      "SDKVersion": "VST 3.8.0",
+      "Sub Categories": [
+        "Fx",
+        "Delay",
+        "Reverb",
+      ],
+      "Class Flags": 0,
+      "Cardinality": 2147483647,
+      "Snapshots": [
+      ],
+    },
+    {
+      "CID": "ABCDEF011234ABCD466C6F77466C7374",
+      "Category": "Component Controller Class",
+      "Name": "FlowstatePlugin",
+      "Vendor": "Flowstate Audio",
+      "Version": "1.0.0",
+      "SDKVersion": "VST 3.8.0",
+      "Sub Categories": [
+        "Fx",
+        "Delay",
+        "Reverb",
+      ],
+      "Class Flags": 0,
+      "Cardinality": 2147483647,
+      "Snapshots": [
+      ],
+    },
+  ],
+}
