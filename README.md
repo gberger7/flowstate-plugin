@@ -81,12 +81,10 @@ are used. Features include:
 - Transient value display on the Output knob
 - Custom Rubik Glitch / Rajdhani typography
 
+<img width="901" height="622" alt="Screenshot 2026-04-20 at 1 14 11 PM" src="https://github.com/user-attachments/assets/e03f903f-be69-4ecb-a160-56e422f75c82" />
+
 ## Status
 
 Currently in active development. Core DSP engine complete with 14/14 
 property tests passing. UI complete and interactive. DAW integration 
 testing in progress.
-
-## UI Screenshot
-<img width="901" height="622" alt="Screenshot 2026-04-20 at 1 14 11 PM" src="https://github.com/user-attachments/assets/e03f903f-be69-4ecb-a160-56e422f75c82" />
-
